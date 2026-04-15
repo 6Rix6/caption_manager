@@ -388,6 +388,7 @@ private open class CaptionManagerApiPigeonCodec : StandardMessageCodec() {
   }
 }
 
+
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
 interface CaptionManagerApi {
   fun isEnabled(): Boolean?
@@ -397,6 +398,7 @@ interface CaptionManagerApi {
   fun getFontScale(): Double?
   fun getLocale(): String?
   fun getUserStyle(): NativeCaptionStyle?
+  fun openCaptionSetting(callback: (Result<Unit>) -> Unit)
 
   companion object {
     /** The codec used by CaptionManagerApi. */
@@ -507,6 +509,23 @@ interface CaptionManagerApi {
               CaptionManagerApiPigeonUtils.wrapError(exception)
             }
             reply.reply(wrapped)
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.caption_manager.CaptionManagerApi.openCaptionSetting$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { _, reply ->
+            api.openCaptionSetting{ result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(CaptionManagerApiPigeonUtils.wrapError(error))
+              } else {
+                reply.reply(CaptionManagerApiPigeonUtils.wrapResult(null))
+              }
+            }
           }
         } else {
           channel.setMessageHandler(null)

@@ -38,4 +38,12 @@ void fetchSettings() async {
     print('Edge Type: ${style.edgeType}');
   }
 }
+
+void openSettings() async {
+    // Open system caption settings.
+    // Wait until the user returns from the settings screen.
+    await _captionManager.openCaptionSetting();
+
+    print("Returned from settings");
+}
 ```

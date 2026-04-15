@@ -44,4 +44,9 @@ class MethodChannelCaptionManager extends CaptionManagerPlatform {
   Future<String?> getLocale() {
     return api.getLocale();
   }
+
+  @override
+  Future<void> openCaptionSetting() {
+    return api.openCaptionSetting();
+  }
 }

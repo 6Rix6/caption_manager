@@ -36,4 +36,9 @@ class CaptionManager {
   Future<CaptionStyle?> getUserStyle() {
     return CaptionManagerPlatform.instance.getUserStyle();
   }
+
+  /// Opens system caption settings screen
+  Future<void> openCaptionSetting() {
+    return CaptionManagerPlatform.instance.openCaptionSetting();
+  }
 }

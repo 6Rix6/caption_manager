@@ -43,6 +43,11 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _openCaptionSetting() async {
+    await _captionManager.openCaptionSetting();
+    print("Returned from settings");
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -65,9 +70,17 @@ class _MyAppState extends State<MyApp> {
               _buildCaptionPreview(),
               const Spacer(),
               Center(
-                child: ElevatedButton(
-                  onPressed: _loadCaptionSettings,
-                  child: const Text('Refresh Settings'),
+                child: Column(
+                  children: [
+                    ElevatedButton(
+                      onPressed: _openCaptionSetting,
+                      child: const Text('Open Caption Settings'),
+                    ),
+                    ElevatedButton(
+                      onPressed: _loadCaptionSettings,
+                      child: const Text('Refresh Settings'),
+                    ),
+                  ],
                 ),
               ),
             ],

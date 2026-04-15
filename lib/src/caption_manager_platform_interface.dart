@@ -57,4 +57,8 @@ abstract class CaptionManagerPlatform extends PlatformInterface {
   Future<String?> getLocale() {
     throw UnimplementedError('getLocale() has not been implemented.');
   }
+
+  Future<void> openCaptionSetting() {
+    throw UnimplementedError('openCaptionSetting() has not been implemented.');
+  }
 }

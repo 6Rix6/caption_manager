@@ -91,4 +91,7 @@ abstract class CaptionManagerApi {
   String? getLocale();
 
   NativeCaptionStyle? getUserStyle();
+
+  @async
+  void openCaptionSetting();
 }
