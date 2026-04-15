@@ -1,5 +1,6 @@
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
+import 'caption_manager_api.g.dart';
 import 'caption_manager_method_channel.dart';
 import 'models/caption_style.dart';
 
@@ -60,5 +61,41 @@ abstract class CaptionManagerPlatform extends PlatformInterface {
 
   Future<void> openCaptionSetting() {
     throw UnimplementedError('openCaptionSetting() has not been implemented.');
+  }
+
+  Stream<CaptionManagerEvent> get captionChanges {
+    throw UnimplementedError('captionChanges stream has not been implemented.');
+  }
+
+  Stream<bool?> get enabledChanges {
+    throw UnimplementedError('enabledChanges stream has not been implemented.');
+  }
+
+  Stream<bool?> get systemAudioCaptioningEnabledChanges {
+    throw UnimplementedError(
+      'systemAudioCaptioningEnabledChanges stream has not been implemented.',
+    );
+  }
+
+  Stream<bool?> get systemAudioCaptioningUiEnabledChanges {
+    throw UnimplementedError(
+      'systemAudioCaptioningUiEnabledChanges stream has not been implemented.',
+    );
+  }
+
+  Stream<double?> get fontScaleChanges {
+    throw UnimplementedError(
+      'fontScaleChanges stream has not been implemented.',
+    );
+  }
+
+  Stream<String?> get localeChanges {
+    throw UnimplementedError('localeChanges stream has not been implemented.');
+  }
+
+  Stream<CaptionStyle?> get userStyleChanges {
+    throw UnimplementedError(
+      'userStyleChanges stream has not been implemented.',
+    );
   }
 }

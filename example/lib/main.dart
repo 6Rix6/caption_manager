@@ -61,13 +61,48 @@ class _MyAppState extends State<MyApp> {
               _buildInfoTile('Enabled', _isEnabled.toString()),
               _buildInfoTile('Font Scale', _fontScale.toStringAsFixed(2)),
               _buildInfoTile('Locale', _locale),
+              const SizedBox(height: 16),
+              StreamBuilder(
+                stream: _captionManager.enabledChanges,
+                builder: (context, snapshot) => _buildInfoTile(
+                  'Enabled (Stream)',
+                  snapshot.data?.toString() ?? 'null',
+                ),
+              ),
+              StreamBuilder(
+                stream: _captionManager.fontScaleChanges,
+                builder: (context, snapshot) => _buildInfoTile(
+                  'FontScale (Stream)',
+                  snapshot.data?.toString() ?? 'null',
+                ),
+              ),
+              StreamBuilder(
+                stream: _captionManager.localeChanges,
+                builder: (context, snapshot) => _buildInfoTile(
+                  'Locale (Stream)',
+                  snapshot.data?.toString() ?? 'null',
+                ),
+              ),
               const SizedBox(height: 32),
               const Text(
                 '--- Preview ---',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 16),
-              _buildCaptionPreview(),
+              _buildCaptionPreview(_style, _fontScale),
+              const Text(
+                '--- Preview (Stream)---',
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              StreamBuilder(
+                stream: _captionManager.userStyleChanges,
+                builder: (context, snapshot) => StreamBuilder(
+                  stream: _captionManager.fontScaleChanges,
+                  builder: (context, fontScaleSnapshot) => _buildCaptionPreview(
+                    snapshot.data,
+                    fontScaleSnapshot.data ?? 1.0,
+                  ),
+                ),
+              ),
               const Spacer(),
               Center(
                 child: Column(
@@ -98,29 +133,29 @@ class _MyAppState extends State<MyApp> {
   }
 
   /// A preview widget that mimics how captions look with current system settings
-  Widget _buildCaptionPreview() {
-    if (_style == null) return const Text('No style data available');
+  Widget _buildCaptionPreview(CaptionStyle? style, double fontScale) {
+    if (style == null) return const Text('No style data available');
 
     return Container(
       padding: const EdgeInsets.all(8.0),
-      color: _style?.windowColor ?? Colors.transparent, // Caption Window
+      color: style.windowColor ?? Colors.transparent, // Caption Window
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        color: _style?.backgroundColor ?? Colors.black54, // Text Background
+        color: style.backgroundColor ?? Colors.black54, // Text Background
         child: Text(
           'This is a caption preview text.',
           style: TextStyle(
-            color: _style?.foregroundColor ?? Colors.white,
-            fontSize: 18 * _fontScale,
+            color: style.foregroundColor ?? Colors.white,
+            fontSize: 18 * fontScale,
             // Simple mapping for demonstration
-            fontWeight: _style?.typeface?.isBold == true
+            fontWeight: style.typeface?.isBold == true
                 ? FontWeight.bold
                 : FontWeight.normal,
-            fontStyle: _style?.typeface?.isItalic == true
+            fontStyle: style.typeface?.isItalic == true
                 ? FontStyle.italic
                 : FontStyle.normal,
-            fontFamily: _style?.typeface?.systemFontFamilyName,
-            shadows: _buildEdgeEffect(_style?.edgeType, _style?.edgeColor),
+            fontFamily: style.typeface?.systemFontFamilyName,
+            shadows: _buildEdgeEffect(style.edgeType, style.edgeColor),
           ),
         ),
       ),

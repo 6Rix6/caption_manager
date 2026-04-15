@@ -339,6 +339,60 @@ data class NativeCaptionStyle (
     return result
   }
 }
+
+/** Generated class from Pigeon that represents data sent in messages. */
+data class CaptionManagerEvent (
+  val isEnabled: Boolean? = null,
+  val isSystemAudioCaptioningEnabled: Boolean? = null,
+  val isSystemAudioCaptioningUiEnabled: Boolean? = null,
+  val fontScale: Double? = null,
+  val locale: String? = null,
+  val userStyle: NativeCaptionStyle? = null
+)
+ {
+  companion object {
+    fun fromList(pigeonVar_list: List<Any?>): CaptionManagerEvent {
+      val isEnabled = pigeonVar_list[0] as Boolean?
+      val isSystemAudioCaptioningEnabled = pigeonVar_list[1] as Boolean?
+      val isSystemAudioCaptioningUiEnabled = pigeonVar_list[2] as Boolean?
+      val fontScale = pigeonVar_list[3] as Double?
+      val locale = pigeonVar_list[4] as String?
+      val userStyle = pigeonVar_list[5] as NativeCaptionStyle?
+      return CaptionManagerEvent(isEnabled, isSystemAudioCaptioningEnabled, isSystemAudioCaptioningUiEnabled, fontScale, locale, userStyle)
+    }
+  }
+  fun toList(): List<Any?> {
+    return listOf(
+      isEnabled,
+      isSystemAudioCaptioningEnabled,
+      isSystemAudioCaptioningUiEnabled,
+      fontScale,
+      locale,
+      userStyle,
+    )
+  }
+  override fun equals(other: Any?): Boolean {
+    if (other == null || other.javaClass != javaClass) {
+      return false
+    }
+    if (this === other) {
+      return true
+    }
+    val other = other as CaptionManagerEvent
+    return CaptionManagerApiPigeonUtils.deepEquals(this.isEnabled, other.isEnabled) && CaptionManagerApiPigeonUtils.deepEquals(this.isSystemAudioCaptioningEnabled, other.isSystemAudioCaptioningEnabled) && CaptionManagerApiPigeonUtils.deepEquals(this.isSystemAudioCaptioningUiEnabled, other.isSystemAudioCaptioningUiEnabled) && CaptionManagerApiPigeonUtils.deepEquals(this.fontScale, other.fontScale) && CaptionManagerApiPigeonUtils.deepEquals(this.locale, other.locale) && CaptionManagerApiPigeonUtils.deepEquals(this.userStyle, other.userStyle)
+  }
+
+  override fun hashCode(): Int {
+    var result = javaClass.hashCode()
+    result = 31 * result + CaptionManagerApiPigeonUtils.deepHash(this.isEnabled)
+    result = 31 * result + CaptionManagerApiPigeonUtils.deepHash(this.isSystemAudioCaptioningEnabled)
+    result = 31 * result + CaptionManagerApiPigeonUtils.deepHash(this.isSystemAudioCaptioningUiEnabled)
+    result = 31 * result + CaptionManagerApiPigeonUtils.deepHash(this.fontScale)
+    result = 31 * result + CaptionManagerApiPigeonUtils.deepHash(this.locale)
+    result = 31 * result + CaptionManagerApiPigeonUtils.deepHash(this.userStyle)
+    return result
+  }
+}
 private open class CaptionManagerApiPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
@@ -362,6 +416,11 @@ private open class CaptionManagerApiPigeonCodec : StandardMessageCodec() {
           NativeCaptionStyle.fromList(it)
         }
       }
+      133.toByte() -> {
+        return (readValue(buffer) as? List<Any?>)?.let {
+          CaptionManagerEvent.fromList(it)
+        }
+      }
       else -> super.readValueOfType(type, buffer)
     }
   }
@@ -383,10 +442,16 @@ private open class CaptionManagerApiPigeonCodec : StandardMessageCodec() {
         stream.write(132)
         writeValue(stream, value.toList())
       }
+      is CaptionManagerEvent -> {
+        stream.write(133)
+        writeValue(stream, value.toList())
+      }
       else -> super.writeValue(stream, value)
     }
   }
 }
+
+val CaptionManagerApiPigeonMethodCodec = StandardMethodCodec(CaptionManagerApiPigeonCodec())
 
 
 /** Generated interface from Pigeon that represents a handler of messages from Flutter. */
@@ -534,3 +599,57 @@ interface CaptionManagerApi {
     }
   }
 }
+
+private class CaptionManagerApiPigeonStreamHandler<T>(
+    val wrapper: CaptionManagerApiPigeonEventChannelWrapper<T>
+) : EventChannel.StreamHandler {
+  var pigeonSink: PigeonEventSink<T>? = null
+
+  override fun onListen(p0: Any?, sink: EventChannel.EventSink) {
+    pigeonSink = PigeonEventSink<T>(sink)
+    wrapper.onListen(p0, pigeonSink!!)
+  }
+
+  override fun onCancel(p0: Any?) {
+    pigeonSink = null
+    wrapper.onCancel(p0)
+  }
+}
+
+interface CaptionManagerApiPigeonEventChannelWrapper<T> {
+  open fun onListen(p0: Any?, sink: PigeonEventSink<T>) {}
+
+  open fun onCancel(p0: Any?) {}
+}
+
+class PigeonEventSink<T>(private val sink: EventChannel.EventSink) {
+  fun success(value: T) {
+    sink.success(value)
+  }
+
+  fun error(errorCode: String, errorMessage: String?, errorDetails: Any?) {
+    sink.error(errorCode, errorMessage, errorDetails)
+  }
+
+  fun endOfStream() {
+    sink.endOfStream()
+  }
+}
+      
+abstract class OnCaptionChangedStreamHandler : CaptionManagerApiPigeonEventChannelWrapper<CaptionManagerEvent> {
+  companion object {
+    fun register(messenger: BinaryMessenger, streamHandler: OnCaptionChangedStreamHandler, instanceName: String = "") {
+      var channelName: String = "dev.flutter.pigeon.caption_manager.CaptionManagerEventApi.onCaptionChanged"
+      if (instanceName.isNotEmpty()) {
+        channelName += ".$instanceName"
+      }
+      val internalStreamHandler = CaptionManagerApiPigeonStreamHandler<CaptionManagerEvent>(streamHandler)
+      EventChannel(messenger, channelName, CaptionManagerApiPigeonMethodCodec).setStreamHandler(internalStreamHandler)
+    }
+  }
+// Implement methods from CaptionManagerApiPigeonEventChannelWrapper
+override fun onListen(p0: Any?, sink: PigeonEventSink<CaptionManagerEvent>) {}
+
+override fun onCancel(p0: Any?) {}
+}
+      

@@ -13,18 +13,26 @@ class CaptionManagerPlugin : FlutterPlugin, ActivityAware, ActivityResultListene
     private val resultListeners =
         mutableListOf<(requestCode: Int, resultCode: Int, data: Intent?) -> Boolean>()
 
+    private var apiImpl: CaptionManagerApiImpl? = null;
+
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        val onCaptionChangedImpl = OnCaptionChangedImpl();
+        apiImpl = CaptionManagerApiImpl(
+                context = binding.applicationContext,
+                onCaptionChangedImpl= onCaptionChangedImpl,
+                activityProvider = { activityBinding?.activity },
+                addActivityResultListener = { resultListeners.add(it) },
+            )
         CaptionManagerApi.setUp(
             binding.binaryMessenger,
-            CaptionManagerApiImpl(
-                context = binding.applicationContext,
-                activityProvider = { activityBinding?.activity },
-                addActivityResultListener = { resultListeners.add(it) }
-            )
+            apiImpl
         )
+        OnCaptionChangedStreamHandler.register(binding.binaryMessenger,onCaptionChangedImpl)
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        apiImpl?.dispose()
+        resultListeners.clear()
         CaptionManagerApi.setUp(binding.binaryMessenger, null)
     }
 

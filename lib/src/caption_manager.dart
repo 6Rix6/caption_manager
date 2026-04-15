@@ -1,3 +1,4 @@
+import 'caption_manager_api.g.dart';
 import 'caption_manager_platform_interface.dart';
 import 'models/caption_style.dart';
 
@@ -41,4 +42,25 @@ class CaptionManager {
   Future<void> openCaptionSetting() {
     return CaptionManagerPlatform.instance.openCaptionSetting();
   }
+
+  Stream<CaptionManagerEvent> get captionChanges =>
+      CaptionManagerPlatform.instance.captionChanges;
+
+  Stream<bool?> get enabledChanges =>
+      CaptionManagerPlatform.instance.enabledChanges;
+
+  Stream<bool?> get systemAudioCaptioningEnabledChanges =>
+      CaptionManagerPlatform.instance.systemAudioCaptioningEnabledChanges;
+
+  Stream<bool?> get systemAudioCaptioningUiEnabledChanges =>
+      CaptionManagerPlatform.instance.systemAudioCaptioningUiEnabledChanges;
+
+  Stream<double?> get fontScaleChanges =>
+      CaptionManagerPlatform.instance.fontScaleChanges;
+
+  Stream<String?> get localeChanges =>
+      CaptionManagerPlatform.instance.localeChanges;
+
+  Stream<CaptionStyle?> get userStyleChanges =>
+      CaptionManagerPlatform.instance.userStyleChanges;
 }

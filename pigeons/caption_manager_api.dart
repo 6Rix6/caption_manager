@@ -76,6 +76,24 @@ class NativeCaptionStyle {
   });
 }
 
+class CaptionManagerEvent {
+  final bool? isEnabled;
+  final bool? isSystemAudioCaptioningEnabled;
+  final bool? isSystemAudioCaptioningUiEnabled;
+  final double? fontScale;
+  final String? locale;
+  final NativeCaptionStyle? userStyle;
+
+  const CaptionManagerEvent({
+    this.isEnabled,
+    this.isSystemAudioCaptioningEnabled,
+    this.isSystemAudioCaptioningUiEnabled,
+    this.fontScale,
+    this.locale,
+    this.userStyle,
+  });
+}
+
 @HostApi()
 abstract class CaptionManagerApi {
   bool? isEnabled();
@@ -94,4 +112,9 @@ abstract class CaptionManagerApi {
 
   @async
   void openCaptionSetting();
+}
+
+@EventChannelApi()
+abstract class CaptionManagerEventApi {
+  CaptionManagerEvent onCaptionChanged();
 }

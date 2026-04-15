@@ -252,6 +252,71 @@ class NativeCaptionStyle {
   int get hashCode => _deepHash(<Object?>[runtimeType, ..._toList()]);
 }
 
+class CaptionManagerEvent {
+  CaptionManagerEvent({
+    this.isEnabled,
+    this.isSystemAudioCaptioningEnabled,
+    this.isSystemAudioCaptioningUiEnabled,
+    this.fontScale,
+    this.locale,
+    this.userStyle,
+  });
+
+  bool? isEnabled;
+
+  bool? isSystemAudioCaptioningEnabled;
+
+  bool? isSystemAudioCaptioningUiEnabled;
+
+  double? fontScale;
+
+  String? locale;
+
+  NativeCaptionStyle? userStyle;
+
+  List<Object?> _toList() {
+    return <Object?>[
+      isEnabled,
+      isSystemAudioCaptioningEnabled,
+      isSystemAudioCaptioningUiEnabled,
+      fontScale,
+      locale,
+      userStyle,
+    ];
+  }
+
+  Object encode() {
+    return _toList();  }
+
+  static CaptionManagerEvent decode(Object result) {
+    result as List<Object?>;
+    return CaptionManagerEvent(
+      isEnabled: result[0] as bool?,
+      isSystemAudioCaptioningEnabled: result[1] as bool?,
+      isSystemAudioCaptioningUiEnabled: result[2] as bool?,
+      fontScale: result[3] as double?,
+      locale: result[4] as String?,
+      userStyle: result[5] as NativeCaptionStyle?,
+    );
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  bool operator ==(Object other) {
+    if (other is! CaptionManagerEvent || other.runtimeType != runtimeType) {
+      return false;
+    }
+    if (identical(this, other)) {
+      return true;
+    }
+    return _deepEquals(isEnabled, other.isEnabled) && _deepEquals(isSystemAudioCaptioningEnabled, other.isSystemAudioCaptioningEnabled) && _deepEquals(isSystemAudioCaptioningUiEnabled, other.isSystemAudioCaptioningUiEnabled) && _deepEquals(fontScale, other.fontScale) && _deepEquals(locale, other.locale) && _deepEquals(userStyle, other.userStyle);
+  }
+
+  @override
+  // ignore: avoid_equals_and_hash_code_on_mutable_classes
+  int get hashCode => _deepHash(<Object?>[runtimeType, ..._toList()]);
+}
+
 
 class _PigeonCodec extends StandardMessageCodec {
   const _PigeonCodec();
@@ -272,6 +337,9 @@ class _PigeonCodec extends StandardMessageCodec {
     }    else if (value is NativeCaptionStyle) {
       buffer.putUint8(132);
       writeValue(buffer, value.encode());
+    }    else if (value is CaptionManagerEvent) {
+      buffer.putUint8(133);
+      writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
     }
@@ -290,11 +358,15 @@ class _PigeonCodec extends StandardMessageCodec {
         return Typeface.decode(readValue(buffer)!);
       case 132:
         return NativeCaptionStyle.decode(readValue(buffer)!);
+      case 133:
+        return CaptionManagerEvent.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
     }
   }
 }
+
+const StandardMethodCodec pigeonMethodCodec = StandardMethodCodec(_PigeonCodec());
 
 class CaptionManagerApi {
   /// Constructor for [CaptionManagerApi].  The [binaryMessenger] named argument is
@@ -460,3 +532,15 @@ class CaptionManagerApi {
     ;
   }
 }
+
+Stream<CaptionManagerEvent> onCaptionChanged( {String instanceName = ''}) {
+  if (instanceName.isNotEmpty) {
+    instanceName = '.$instanceName';
+  }
+  final EventChannel onCaptionChangedChannel =
+      EventChannel('dev.flutter.pigeon.caption_manager.CaptionManagerEventApi.onCaptionChanged$instanceName', pigeonMethodCodec);
+  return onCaptionChangedChannel.receiveBroadcastStream().map((dynamic event) {
+    return event as CaptionManagerEvent;
+  });
+}
+    
