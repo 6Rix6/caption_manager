@@ -1,7 +1,7 @@
 name: caption_manager
 description: "Flutter plugin to get system caption preferences."
 version: 1.0.0
-homepage:
+homepage: https://github.com/6Rix6/caption_manager.git
 
 environment:
   sdk: ^3.11.1
@@ -11,6 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
+  meta: ^1.17.0
 
 dev_dependencies:
   flutter_test:
