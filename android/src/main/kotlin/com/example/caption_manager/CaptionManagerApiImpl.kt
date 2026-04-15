@@ -80,7 +80,6 @@ class CaptionManagerApiImpl(
         }
 
         val intent = Intent(Settings.ACTION_CAPTIONING_SETTINGS)
-        @Suppress("DEPRECATION")
         activity.startActivityForResult(intent, REQUEST_CODE_CAPTIONING)
     }
 }
