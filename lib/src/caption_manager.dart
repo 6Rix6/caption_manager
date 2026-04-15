@@ -43,24 +43,31 @@ class CaptionManager {
     return CaptionManagerPlatform.instance.openCaptionSetting();
   }
 
+  /// Stream for receiving all caption manager events.
   Stream<CaptionManagerEvent> get captionChanges =>
       CaptionManagerPlatform.instance.captionChanges;
 
+  /// Stream that emits whenever the system captioning enabled state changes.
   Stream<bool?> get enabledChanges =>
       CaptionManagerPlatform.instance.enabledChanges;
 
+  /// Stream that emits whenever the system audio captioning (Live Caption) enabled state changes.
   Stream<bool?> get systemAudioCaptioningEnabledChanges =>
       CaptionManagerPlatform.instance.systemAudioCaptioningEnabledChanges;
 
+  /// Stream that emits whenever the visibility of the system audio captioning UI changes.
   Stream<bool?> get systemAudioCaptioningUiEnabledChanges =>
       CaptionManagerPlatform.instance.systemAudioCaptioningUiEnabledChanges;
 
+  /// Stream that emits whenever the user's preferred font scale changes.
   Stream<double?> get fontScaleChanges =>
       CaptionManagerPlatform.instance.fontScaleChanges;
 
+  /// Stream that emits whenever the system caption locale changes.
   Stream<String?> get localeChanges =>
       CaptionManagerPlatform.instance.localeChanges;
 
+  /// Stream that emits whenever the user's preferred caption appearance settings change.
   Stream<CaptionStyle?> get userStyleChanges =>
       CaptionManagerPlatform.instance.userStyleChanges;
 }

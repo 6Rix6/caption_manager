@@ -15,6 +15,10 @@ dependencies:
 
 ## Usage
 
+### Basic Usage
+
+You can fetch the current system captioning settings asynchronously:
+
 ```dart
 import 'package:caption_manager/caption_manager.dart';
 
@@ -38,10 +42,39 @@ void fetchSettings() async {
     print('Edge Type: ${style.edgeType}');
   }
 }
+```
 
+### Streams
+
+This plugin provides several `Stream` getters that emit events whenever the user modifies their system captioning preferences. This allows your UI to react instantly without manual polling.
+
+```dart
+void setupListeners() {
+  // Listen for changes in the overall enabled state
+  _captionManager.enabledChanges.listen((isEnabled) {
+    print('Captioning is now: ${isEnabled == true ? "Enabled" : "Disabled"}');
+  });
+
+  // Listen for font scale adjustments
+  _captionManager.fontScaleChanges.listen((newScale) {
+    print('New Font Scale: $newScale');
+  });
+
+  // Listen for style updates (colors, edge types, etc.)
+  _captionManager.userStyleChanges.listen((newStyle) {
+    if (newStyle != null) {
+      updateSubtitleTheme(newStyle);
+    }
+  });
+}
+```
+
+### Opening System Settings
+
+```dart
 void openSettings() async {
-    // Open system caption settings.
-    // Wait until the user returns from the settings screen.
+    // Open system caption settings screen.
+    // The Future completes when the user navigates back to your app.
     await _captionManager.openCaptionSetting();
 
     print("Returned from settings");
