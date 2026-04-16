@@ -3,6 +3,11 @@ import 'caption_manager_platform_interface.dart';
 import 'models/caption_style.dart';
 
 class CaptionManager {
+  factory CaptionManager() => _instance;
+  CaptionManager._();
+
+  static final CaptionManager _instance = CaptionManager._();
+
   /// Returns whether system captioning is enabled.
   Future<bool?> isEnabled() {
     return CaptionManagerPlatform.instance.isEnabled();
